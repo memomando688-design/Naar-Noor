@@ -22,4 +22,9 @@ import { AnimatedBackgroundComponent } from './components/animated-background/an
 })
 export class AppComponent {
   title = 'Naar & Noor';
+
+  ngOnInit() {
+    // Force scroll to top on load to prevent any browser scroll restoration issues
+    window.scrollTo(0, 0);
+  }
 }

@@ -21,81 +21,80 @@
   overflow: hidden;
 }
 
-/* Gradient animations */
+/* Gradient animations - simplified to avoid expensive transforms */
 @keyframes gradient {
   0%, 100% {
     opacity: 1;
-    transform: scale(1) rotate(0deg);
+    transform: translate3d(0,0,0);
   }
   50% {
     opacity: 0.8;
-    transform: scale(1.1) rotate(5deg);
+    transform: translate3d(2%, 2%, 0);
   }
 }
 
 @keyframes gradient-slow {
   0%, 100% {
     opacity: 0.8;
-    transform: scale(1) rotate(0deg);
+    transform: translate3d(0,0,0);
   }
   50% {
     opacity: 1;
-    transform: scale(1.15) rotate(-5deg);
+    transform: translate3d(-2%, -2%, 0);
   }
 }
 
-/* Floating orb animations */
+/* Floating orb animations - simplified */
 @keyframes float {
   0%, 100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate3d(0, 0, 0);
   }
-  33% {
-    transform: translate(30px, -30px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
+  50% {
+    transform: translate3d(20px, -20px, 0);
   }
 }
 
 @keyframes float-delayed {
   0%, 100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate3d(0, 0, 0);
   }
-  33% {
-    transform: translate(-40px, 30px) scale(0.9);
-  }
-  66% {
-    transform: translate(25px, -25px) scale(1.1);
+  50% {
+    transform: translate3d(-30px, 20px, 0);
   }
 }
 
 @keyframes float-slow {
   0%, 100% {
-    transform: translate(0, 0) scale(1);
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translate(20px, 30px) scale(1.05);
+    transform: translate3d(15px, 20px, 0);
   }
 }
 
 .animate-gradient {
   animation: gradient 15s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 .animate-gradient-slow {
   animation: gradient-slow 20s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 .animate-float {
   animation: float 20s ease-in-out infinite;
+  will-change: transform;
 }
 
 .animate-float-delayed {
   animation: float-delayed 25s ease-in-out infinite;
-  animation-delay: 5s;
+  animation-delay: 2s;
+  will-change: transform;
 }
 
 .animate-float-slow {
   animation: float-slow 30s ease-in-out infinite;
-  animation-delay: 10s;
+  animation-delay: 5s;
+  will-change: transform;
 }

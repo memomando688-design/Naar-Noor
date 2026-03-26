@@ -7,8 +7,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withInMemoryScrolling({
-        scrollPositionRestoration: 'disabled',
-        anchorScrolling: 'disabled'
+        scrollPositionRestoration: 'top',
+        anchorScrolling: 'enabled'
       }),
       withViewTransitions(),
       withPreloading(PreloadAllModules)

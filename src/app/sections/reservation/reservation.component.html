@@ -1,7 +1,7 @@
-<section id="reserve" class="relative z-20 py-12 px-6 bg-[#0a0a0a]">
+<section id="reservation-full" class="relative z-20 py-12 px-6 bg-[#0a0a0a]">
   <div class="max-w-5xl mx-auto">
-    <div class="bg-[#111] border border-white/5 rounded-2xl shadow-2xl backdrop-blur-xl flex flex-col md:flex-row overflow-hidden">
-      <div class="p-10 md:p-12 md:w-2/5 flex flex-col justify-center bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-tl-2xl rounded-bl-2xl md:rounded-bl-2xl md:rounded-tr-none">
+    <div class="bg-[#111] border border-white/5 rounded-2xl shadow-2xl backdrop-blur-xl flex flex-col md:flex-row">
+      <div class="p-10 md:p-12 md:w-2/5 flex flex-col justify-center bg-gradient-to-br from-[#111] to-[#1a1a1a] rounded-t-2xl md:rounded-tr-none md:rounded-l-2xl">
         <h2 class="font-['Forum'] text-3xl md:text-4xl text-white tracking-tight mb-4">Reserve Your Table</h2>
         <p class="text-sm text-neutral-400 leading-relaxed mb-8">
           Experience unforgettable flavors in a warm, premium setting. For parties larger than 8, please contact us directly.
@@ -12,7 +12,7 @@
         </div>
       </div>
 
-      <div class="p-10 md:p-12 md:w-3/5 border-t md:border-t-0 md:border-l border-white/5 relative">
+      <div class="p-10 md:p-12 md:w-3/5 border-t md:border-t-0 md:border-l border-white/5 relative rounded-b-2xl md:rounded-bl-none md:rounded-r-2xl">
         <form (ngSubmit)="onSubmit()" class="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div class="space-y-1.5 relative z-10">
             <label class="text-xs text-neutral-400 ml-1">Full Name</label>

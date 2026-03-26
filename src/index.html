@@ -140,6 +140,10 @@
   </script>
 </head>
 <body>
+  <script>
+    // Immediate scroll to top to prevent browser scroll restoration flicker
+    window.scrollTo(0, 0);
+  </script>
   <app-root></app-root>
 </body>
 </html>
