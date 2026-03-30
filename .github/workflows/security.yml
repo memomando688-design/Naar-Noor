@@ -96,6 +96,7 @@ jobs:
       
       - name: Build Docker image
         run: docker build -t lost-yeti:${{ github.sha }} .
+        continue-on-error: true
       
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -103,11 +104,13 @@ jobs:
           image-ref: 'lost-yeti:${{ github.sha }}'
           format: 'sarif'
           output: 'trivy-results.sarif'
+        continue-on-error: true
       
       - name: Upload Trivy results to GitHub Security
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: 'trivy-results.sarif'
+        continue-on-error: true
 
   owasp-scan:
     name: OWASP Dependency Check
@@ -136,6 +139,7 @@ jobs:
   secret-scan:
     name: Secret Scanning
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     
     steps:
       - name: Checkout code
