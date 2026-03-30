@@ -78,7 +78,7 @@ ng generate component sections/new-section --standalone
 
 ## Resources
 
-- **Live Site:** https://naar222noor.vercel.app
+- **Live Site:** https://naar-noor.vercel.app
 - **Repository:** https://github.com/Mostafa-SAID7/Naar-Noor
 - **Documentation:** See `docs/` folder
 

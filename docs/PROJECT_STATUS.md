@@ -10,7 +10,7 @@
 
 **Naar & Noor** (نار ونور) is a premium Himalayan restaurant website built with Angular 17, optimized for the Egyptian market with bilingual SEO (English/Arabic).
 
-- **Live URL:** https://naar222noor.vercel.app
+- **Live URL:** https://naar-noor.vercel.app
 - **Repository:** https://github.com/Mostafa-SAID7/Naar-Noor
 - **Tech Stack:** Angular 17 (Standalone), Tailwind CSS (CDN), TypeScript 5.2
 
@@ -209,7 +209,7 @@ src/
 ## 🚀 Deployment
 
 ### Vercel (Current)
-- **URL:** https://naar222noor.vercel.app
+- **URL:** https://naar-noor.vercel.app
 - **Auto-deploy:** Enabled on push to main
 - **Build Command:** npm run build:prod
 - **Output Directory:** dist/lost-yeti
@@ -386,7 +386,7 @@ git push origin main   # Auto-deploys to Vercel
 
 ### Deployment
 - **Vercel Dashboard:** https://vercel.com/dashboard
-- **Live Site:** https://naar222noor.vercel.app
+- **Live Site:** https://naar-noor.vercel.app
 
 ### Documentation
 - **Angular Docs:** https://angular.io/docs

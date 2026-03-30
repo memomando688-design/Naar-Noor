@@ -9,7 +9,7 @@
 
 **Premium Himalayan Restaurant Website - Authentic Mountain Cuisine in Egypt**
 
-[🌐 Live Demo](https://naar222noor.vercel.app) • [📚 Documentation](./docs) • [🐛 Report Bug](https://github.com/Mostafa-SAID7/Naar-Noor/issues) • [✨ Request Feature](https://github.com/Mostafa-SAID7/Naar-Noor/issues)
+[🌐 Live Demo](https://naar-noor.vercel.app) • [📚 Documentation](./docs) • [🐛 Report Bug](https://github.com/Mostafa-SAID7/Naar-Noor/issues) • [✨ Request Feature](https://github.com/Mostafa-SAID7/Naar-Noor/issues)
 
 </div>
 
@@ -145,7 +145,7 @@ Our comprehensive documentation is organized in the `/docs` folder:
 ## 🚀 Deployment Status
 
 ### Production Environment
-- **Live URL**: [https://naar222noor.vercel.app](https://naar222noor.vercel.app)
+- **Live URL**: [https://naar-noor.vercel.app](https://naar-noor.vercel.app)
 - **Platform**: Vercel (Auto-deploy from main branch)
 - **Status**: ✅ Production Ready
 - **Performance**: Lighthouse Score 90+
@@ -235,7 +235,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Contact & Support
 
 ### 🏪 Restaurant Information
-- **Website**: [naar222noor.vercel.app](https://naar222noor.vercel.app)
+- **Website**: [naar-noor.vercel.app](https://naar-noor.vercel.app)
 - **Location**: Cairo, Egypt
 - **Hours**: 12:00 PM - 11:00 PM (Closed Mondays)
 

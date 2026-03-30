@@ -19,7 +19,7 @@ Complete guide for deploying Naar & Noor to various platforms.
 
 ## Quick Start - Vercel (Recommended)
 
-Your app is configured to deploy to: **https://naar222noor.vercel.app/**
+Your app is configured to deploy to: **https://naar-noor.vercel.app/**
 
 ### Quick Deploy Steps:
 
@@ -41,7 +41,7 @@ Your app is configured to deploy to: **https://naar222noor.vercel.app/**
 4. **Deploy:**
    - Click "Deploy"
    - Wait for build to complete (2-3 minutes)
-   - Your site will be live at `https://naar222noor.vercel.app`
+   - Your site will be live at `https://naar-noor.vercel.app`
 
 ### Auto-Deploy:
 Every push to the `main` branch will automatically trigger a new deployment.
@@ -350,7 +350,7 @@ After deployment, test PWA features:
 Run audit:
 ```bash
 npm install -g lighthouse
-lighthouse https://naar222noor.vercel.app --view
+lighthouse https://naar-noor.vercel.app --view
 ```
 
 Target scores:
@@ -397,9 +397,9 @@ Target scores:
 ### Google Search Console
 
 1. Go to [search.google.com/search-console](https://search.google.com/search-console)
-2. Add property: `https://naar222noor.vercel.app`
+2. Add property: `https://naar-noor.vercel.app`
 3. Verify ownership
-4. Submit sitemap: `https://naar222noor.vercel.app/sitemap.xml`
+4. Submit sitemap: `https://naar-noor.vercel.app/sitemap.xml`
 
 ---
 
