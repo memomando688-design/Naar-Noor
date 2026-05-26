@@ -1,0 +1,38 @@
+<section class="py-6 bg-[#0d0d0d] px-6 border-y border-white/5">
+  <div class="max-w-7xl mx-auto">
+
+    <div *ngIf="loading" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div *ngFor="let i of [1,2,3]" class="p-8 rounded-2xl bg-[#111] border border-white/5 animate-pulse">
+        <div class="flex gap-1 mb-6">
+          <div *ngFor="let s of [1,2,3,4,5]" class="w-4 h-4 bg-white/10 rounded"></div>
+        </div>
+        <div class="space-y-2 mb-6">
+          <div class="h-4 bg-white/5 rounded w-full"></div>
+          <div class="h-4 bg-white/5 rounded w-4/5"></div>
+        </div>
+        <div class="h-3 bg-white/10 rounded w-20"></div>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="text-center py-12 text-neutral-500 text-sm">
+      Unable to load reviews right now.
+    </div>
+
+    <div *ngIf="!loading && !error" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div *ngFor="let review of reviews" class="p-8 rounded-2xl bg-[#111] border border-white/5 relative">
+        <iconify-icon icon="solar:quote-right-bold-duotone" width="48" class="absolute top-6 right-6 text-white/5"></iconify-icon>
+
+        <div class="flex items-center gap-1 mb-6 text-[#C65A1E]">
+          <iconify-icon *ngFor="let s of [].constructor(review.rating)" icon="solar:star-bold" width="16"></iconify-icon>
+        </div>
+
+        <p class="text-sm text-neutral-100 font-light italic leading-relaxed mb-6">
+          "{{ review.text }}"
+        </p>
+
+        <span class="text-xs text-neutral-300 uppercase tracking-wider font-medium">{{ review.author }}</span>
+      </div>
+    </div>
+
+  </div>
+</section>
