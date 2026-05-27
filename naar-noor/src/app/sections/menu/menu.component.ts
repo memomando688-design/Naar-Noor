@@ -1,11 +1,14 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService, MenuItem } from '../../services/api.service';
+import { CartService } from '../../services/cart.service';
 import { RevealDirective } from '../../directives/scroll-reveal.directive';
 
 interface MenuItemView {
+  id: string;
   name: string;
-  price: string;
+  price: number;
+  priceFormatted: string;
   description: string;
   category: string;
   isVegetarian: boolean;
@@ -22,6 +25,7 @@ interface MenuItemView {
 })
 export class MenuComponent implements OnInit {
   private readonly api = inject(ApiService);
+  readonly cart = inject(CartService);
 
   allItems: MenuItemView[] = [];
   filteredItems: MenuItemView[] = [];
@@ -29,13 +33,16 @@ export class MenuComponent implements OnInit {
   activeCategory = 'All';
   loading = true;
   error = false;
+  addedId: string | null = null;
 
   ngOnInit(): void {
     this.api.getMenu().subscribe({
       next: (items: MenuItem[]) => {
         this.allItems = items.map(item => ({
+          id: item.id,
           name: item.name,
-          price: `£${item.price.toFixed(2)}`,
+          price: item.price,
+          priceFormatted: `£${item.price.toFixed(2)}`,
           description: item.description,
           category: item.category,
           isVegetarian: item.isVegetarian,
@@ -58,5 +65,22 @@ export class MenuComponent implements OnInit {
     this.filteredItems = cat === 'All'
       ? this.allItems
       : this.allItems.filter(i => i.category === cat);
+  }
+
+  addToCart(item: MenuItemView): void {
+    this.cart.add({
+      menuItemId: item.id,
+      name: item.name,
+      price: item.price,
+      category: item.category
+    });
+    this.addedId = item.id;
+    setTimeout(() => {
+      if (this.addedId === item.id) this.addedId = null;
+    }, 1500);
+  }
+
+  itemCount(id: string): number {
+    return this.cart.items().find(i => i.menuItemId === id)?.quantity ?? 0;
   }
 }
