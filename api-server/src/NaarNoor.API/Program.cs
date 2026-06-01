@@ -47,13 +47,23 @@ app.UseCorsMiddleware();
 // 5. Authorization
 app.UseAuthorizationMiddleware();
 
-// 6. Map Controllers
+// 6. Root API landing
+app.MapGet("/", () => Results.Redirect("/api/docs", permanent: false));
+app.MapGet("/api", () => Results.Ok(new
+{
+    name = "Naar & Noor API",
+    status = "running",
+    docs = "/api/docs",
+    health = "/health"
+}));
+
+// 7. Map Controllers
 app.MapControllersMiddleware();
 
-// 7. Map Health Checks
+// 8. Map Health Checks
 app.MapHealthChecks("/health");
 
-// 8. Seed Database
+// 9. Seed Database
 await app.SeedDatabaseMiddlewareAsync();
 
 app.Run();

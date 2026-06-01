@@ -7,16 +7,16 @@ namespace NaarNoor.Application.MenuItems.Queries.GetMenuItems;
 
 public class GetMenuItemsQueryHandler : IRequestHandler<GetMenuItemsQuery, List<MenuItemDto>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetMenuItemsQueryHandler(IApplicationDbContext context)
+    public GetMenuItemsQueryHandler(IUnitOfWork unitOfWork)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<List<MenuItemDto>> Handle(GetMenuItemsQuery request, CancellationToken cancellationToken)
     {
-        var query = _context.MenuItems.Where(m => m.IsAvailable);
+        var query = _unitOfWork.MenuItems.Query().Where(m => m.IsAvailable);
 
         if (!string.IsNullOrWhiteSpace(request.Category) &&
             Enum.TryParse<MenuCategory>(request.Category, true, out var category))

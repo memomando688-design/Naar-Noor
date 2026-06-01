@@ -6,16 +6,16 @@ namespace NaarNoor.Application.Reviews.Queries.GetApprovedReviews;
 
 public class GetApprovedReviewsQueryHandler : IRequestHandler<GetApprovedReviewsQuery, List<ReviewDto>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetApprovedReviewsQueryHandler(IApplicationDbContext context)
+    public GetApprovedReviewsQueryHandler(IUnitOfWork unitOfWork)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<List<ReviewDto>> Handle(GetApprovedReviewsQuery request, CancellationToken cancellationToken)
     {
-        return await _context.Reviews
+        return await _unitOfWork.Reviews.Query()
             .Where(r => r.IsApproved)
             .OrderByDescending(r => r.CreatedAt)
             .Select(r => new ReviewDto(

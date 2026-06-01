@@ -6,16 +6,16 @@ namespace NaarNoor.Application.Chefs.Queries.GetChefs;
 
 public class GetChefsQueryHandler : IRequestHandler<GetChefsQuery, List<ChefDto>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetChefsQueryHandler(IApplicationDbContext context)
+    public GetChefsQueryHandler(IUnitOfWork unitOfWork)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<List<ChefDto>> Handle(GetChefsQuery request, CancellationToken cancellationToken)
     {
-        return await _context.Chefs
+        return await _unitOfWork.Chefs.Query()
             .Where(c => c.IsActive)
             .OrderBy(c => c.SortOrder)
             .Select(c => new ChefDto(

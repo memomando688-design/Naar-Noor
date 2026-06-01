@@ -6,11 +6,11 @@ namespace NaarNoor.Application.Reservations.Commands.CreateReservation;
 
 public class CreateReservationCommandHandler : IRequestHandler<CreateReservationCommand, Guid>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateReservationCommandHandler(IApplicationDbContext context)
+    public CreateReservationCommandHandler(IUnitOfWork unitOfWork)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Guid> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
@@ -26,8 +26,8 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
             SpecialRequests = request.SpecialRequests
         };
 
-        _context.Reservations.Add(reservation);
-        await _context.SaveChangesAsync(cancellationToken);
+        _unitOfWork.Reservations.Add(reservation);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return reservation.Id;
     }

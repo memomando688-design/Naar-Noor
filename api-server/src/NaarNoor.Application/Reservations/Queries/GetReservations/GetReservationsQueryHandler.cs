@@ -6,16 +6,16 @@ namespace NaarNoor.Application.Reservations.Queries.GetReservations;
 
 public class GetReservationsQueryHandler : IRequestHandler<GetReservationsQuery, List<ReservationDto>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetReservationsQueryHandler(IApplicationDbContext context)
+    public GetReservationsQueryHandler(IUnitOfWork unitOfWork)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<List<ReservationDto>> Handle(GetReservationsQuery request, CancellationToken cancellationToken)
     {
-        return await _context.Reservations
+        return await _unitOfWork.Reservations.Query()
             .OrderByDescending(r => r.ReservationDate)
             .Skip((request.Page - 1) * request.PageSize)
             .Take(request.PageSize)

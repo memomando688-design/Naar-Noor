@@ -7,11 +7,11 @@ namespace NaarNoor.Application.Orders.Commands.CreateOrder;
 
 public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Guid>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateOrderCommandHandler(IApplicationDbContext context)
+    public CreateOrderCommandHandler(IUnitOfWork unitOfWork)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Guid> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -46,8 +46,8 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Gui
             Items                = items
         };
 
-        _context.Orders.Add(order);
-        await _context.SaveChangesAsync(cancellationToken);
+        _unitOfWork.Orders.Add(order);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return order.Id;
     }

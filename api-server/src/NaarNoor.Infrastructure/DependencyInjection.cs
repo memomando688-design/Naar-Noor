@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NaarNoor.Application.Common.Interfaces;
 using NaarNoor.Infrastructure.Data;
+using NaarNoor.Infrastructure.Repositories;
 
 namespace NaarNoor.Infrastructure;
 
@@ -18,6 +19,9 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext>(provider =>
             provider.GetRequiredService<ApplicationDbContext>());
+
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;
     }

@@ -6,11 +6,11 @@ namespace NaarNoor.Application.Contact.Commands.SubmitInquiry;
 
 public class SubmitInquiryCommandHandler : IRequestHandler<SubmitInquiryCommand, Guid>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public SubmitInquiryCommandHandler(IApplicationDbContext context)
+    public SubmitInquiryCommandHandler(IUnitOfWork unitOfWork)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Guid> Handle(SubmitInquiryCommand request, CancellationToken cancellationToken)
@@ -24,8 +24,8 @@ public class SubmitInquiryCommandHandler : IRequestHandler<SubmitInquiryCommand,
             Message = request.Message
         };
 
-        _context.ContactInquiries.Add(inquiry);
-        await _context.SaveChangesAsync(cancellationToken);
+        _unitOfWork.ContactInquiries.Add(inquiry);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return inquiry.Id;
     }
