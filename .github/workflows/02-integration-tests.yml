@@ -15,19 +15,20 @@ jobs:
     timeout-minutes: 15
 
     services:
-      # SQL Server for integration testing (if needed for local tests)
-      sqlserver:
-        image: mcr.microsoft.com/mssql/server:2019-latest
+      # PostgreSQL for integration testing
+      postgres:
+        image: postgres:15-alpine
         env:
-          SA_PASSWORD: TestPassword123!
-          ACCEPT_EULA: Y
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: TestPassword123!
+          POSTGRES_USER: postgres
         options: >-
-          --health-cmd "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P \"\$SA_PASSWORD\" -Q 'SELECT 1'"
+          --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
         ports:
-          - 1433:1433
+          - 5432:5432
 
     steps:
       - name: Checkout code
