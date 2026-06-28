@@ -32,10 +32,10 @@ RUN rm -rf ./*
 COPY --from=builder /app/dist/naar-noor/browser .
 
 # Copy custom nginx configuration (references container hostnames)
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY naar-noor/nginx.conf /etc/nginx/nginx.conf
 
 # Copy health check script
-COPY health-check.sh /app/health-check.sh
+COPY naar-noor/health-check.sh /app/health-check.sh
 RUN chmod +x /app/health-check.sh
 
 # Metadata labels for container identification
