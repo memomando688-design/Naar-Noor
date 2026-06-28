@@ -1,8 +1,11 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SeoService } from '../../services/seo.service';
+import { RealtimeService } from '../../services/realtime.service';
 import { trigger, transition, style, animate, keyframes } from '@angular/animations';
+
+type OrderStatus = 'pending' | 'confirmed' | 'preparing' | 'ready' | 'completed';
 
 @Component({
   selector: 'app-order-confirmed',
@@ -27,10 +30,10 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
     ])
   ],
   template: `
-    <div class="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4 py-20">
+    <div data-cy="order-confirmation" class="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4 py-20">
       <div class="text-center max-w-lg w-full">
 
-        <!-- Checkmark -->
+        <!-- Checkmark / Header -->
         <div @checkmark class="w-24 h-24 mx-auto mb-8 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
           <iconify-icon icon="solar:check-circle-bold" width="52" class="text-emerald-400"></iconify-icon>
         </div>
@@ -41,28 +44,82 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
           <h1 class="font-['Forum'] text-3xl sm:text-4xl text-white tracking-tight mb-4">
             Order Received!
           </h1>
-          <p class="text-neutral-400 text-sm sm:text-base leading-relaxed max-w-sm mx-auto">
-            Thank you for your order. Our team will review it and confirm by phone shortly.
-          </p>
+          
+          <!-- Live Status Stepper -->
+          <div class="my-10 bg-[#111] border border-white/5 rounded-2xl p-6 text-left">
+            <h3 class="text-xs font-semibold text-neutral-500 uppercase tracking-widest mb-6 flex items-center justify-between">
+              <span>Live Order Tracker</span>
+              <span class="flex items-center gap-1.5 normal-case text-emerald-400 font-sans font-normal">
+                <span class="h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
+                Listening for updates
+              </span>
+            </h3>
+            
+            <div class="space-y-6 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-white/5">
+              <!-- Step 1: Received -->
+              <div class="flex items-start gap-4 relative">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 z-10 transition-colors duration-300"
+                     [ngClass]="isStepActive(1) ? 'bg-[#C65A1E] text-white' : 'bg-white/5 text-neutral-500'">
+                  <iconify-icon icon="solar:checklist-minimalistic-bold" width="12"></iconify-icon>
+                </div>
+                <div>
+                  <h4 class="text-sm font-medium transition-colors" [ngClass]="isStepActive(1) ? 'text-white' : 'text-neutral-500'">
+                    Order Received
+                  </h4>
+                  <p class="text-xs text-neutral-500 mt-0.5">We have received your order details.</p>
+                </div>
+              </div>
 
-          <!-- Order ID -->
-          <div *ngIf="orderId" class="mt-8 inline-flex items-center gap-2 px-4 py-2.5 bg-[#111] border border-white/5 rounded-xl">
-            <iconify-icon icon="solar:tag-linear" width="16" class="text-neutral-500"></iconify-icon>
-            <span class="text-xs text-neutral-500">Order reference</span>
-            <span class="text-xs text-white font-medium font-mono">{{ shortId }}</span>
+              <!-- Step 2: Confirmed -->
+              <div class="flex items-start gap-4 relative">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 z-10 transition-colors duration-300"
+                     [ngClass]="isStepActive(2) ? 'bg-[#C65A1E] text-white' : 'bg-white/5 text-neutral-500'">
+                  <iconify-icon icon="solar:phone-calling-bold" width="12"></iconify-icon>
+                </div>
+                <div>
+                  <h4 class="text-sm font-medium transition-colors" [ngClass]="isStepActive(2) ? 'text-white' : 'text-neutral-500'">
+                    Confirmed & Accepted
+                  </h4>
+                  <p class="text-xs text-neutral-500 mt-0.5">Our kitchen checked items and confirmed availability.</p>
+                </div>
+              </div>
+
+              <!-- Step 3: Preparing -->
+              <div class="flex items-start gap-4 relative">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 z-10 transition-colors duration-300"
+                     [ngClass]="isStepActive(3) ? 'bg-[#C65A1E] text-white' : 'bg-white/5 text-neutral-500'">
+                  <iconify-icon icon="solar:fire-bold" width="12"></iconify-icon>
+                </div>
+                <div>
+                  <h4 class="text-sm font-medium transition-colors" [ngClass]="isStepActive(3) ? 'text-white' : 'text-neutral-500'">
+                    Preparing Food
+                  </h4>
+                  <p class="text-xs text-neutral-500 mt-0.5">Your meal is fresh cooked by our Himalayan chefs.</p>
+                </div>
+              </div>
+
+              <!-- Step 4: Ready -->
+              <div class="flex items-start gap-4 relative">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 z-10 transition-colors duration-300"
+                     [ngClass]="isStepActive(4) ? 'bg-emerald-500 text-white' : 'bg-white/5 text-neutral-500'">
+                  <iconify-icon icon="solar:bag-5-bold" width="12"></iconify-icon>
+                </div>
+                <div>
+                  <h4 class="text-sm font-medium transition-colors" [ngClass]="isStepActive(4) ? 'text-emerald-400 font-semibold' : 'text-neutral-500'">
+                    Ready for Handover
+                  </h4>
+                  <p class="text-xs text-neutral-500 mt-0.5">Ready for collection or out for hot delivery.</p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- What happens next -->
-          <div class="mt-10 bg-[#111] border border-white/5 rounded-2xl p-6 text-left space-y-4">
-            <h3 class="text-sm font-medium text-neutral-300 mb-4">What happens next</h3>
-            <div *ngFor="let step of steps; let i = index" class="flex items-start gap-3">
-              <div class="w-6 h-6 rounded-full bg-[#C65A1E]/10 border border-[#C65A1E]/20 flex items-center justify-center shrink-0 mt-0.5">
-                <span class="text-[10px] font-bold text-[#C65A1E]">{{ i + 1 }}</span>
-              </div>
-              <div>
-                <p class="text-sm text-white">{{ step.title }}</p>
-                <p class="text-xs text-neutral-500 mt-0.5">{{ step.desc }}</p>
-              </div>
+          <!-- Order ID / Invoice details -->
+          <div *ngIf="orderId" class="mt-8 flex flex-col items-center gap-2 px-4 py-3 bg-[#111] border border-white/5 rounded-xl">
+            <div class="flex items-center gap-2">
+              <iconify-icon icon="solar:tag-linear" width="16" class="text-neutral-500"></iconify-icon>
+              <span class="text-xs text-neutral-500">Order reference</span>
+              <span data-cy="order-reference" class="text-xs text-white font-medium font-mono">#{{ shortId }}</span>
             </div>
           </div>
 
@@ -79,26 +136,46 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
     </div>
   `
 })
-export class OrderConfirmedComponent implements OnInit {
+export class OrderConfirmedComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly seo = inject(SeoService);
+  private readonly realtime = inject(RealtimeService);
 
   orderId: string | null = null;
   shortId = '';
-
-  readonly steps = [
-    { title: 'We review your order', desc: 'Our kitchen team looks over your items and confirms availability.' },
-    { title: 'You get a call', desc: "We'll ring you on the number provided to confirm and arrange payment." },
-    { title: 'Your food is prepared', desc: 'Freshly made with Himalayan care, ready for collection or delivery.' }
-  ];
-
-  private readonly seo = inject(SeoService);
+  status: OrderStatus = 'pending';
 
   ngOnInit(): void {
     this.seo.setOrderConfirmed();
     this.orderId = this.route.snapshot.queryParamMap.get('id');
     if (this.orderId) {
       this.shortId = this.orderId.split('-')[0].toUpperCase();
+      // Listen for live updates
+      this.realtime.subscribeToOrder(this.orderId, (newStatus) => {
+        this.status = newStatus as OrderStatus;
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.orderId) {
+      this.realtime.unsubscribe(this.orderId, true);
+    }
+  }
+
+  isStepActive(step: number): boolean {
+    switch (step) {
+      case 1:
+        return true; // Always active when order is received
+      case 2:
+        return ['confirmed', 'preparing', 'ready', 'completed'].includes(this.status);
+      case 3:
+        return ['preparing', 'ready', 'completed'].includes(this.status);
+      case 4:
+        return ['ready', 'completed'].includes(this.status);
+      default:
+        return false;
     }
   }
 

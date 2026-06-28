@@ -1,12 +1,13 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CartService } from '../../services/cart.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
@@ -14,13 +15,15 @@ import { CartService } from '../../services/cart.service';
 export class HeaderComponent {
   mobileMenuOpen = false;
   readonly cart = inject(CartService);
+  readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
   toggleMobileMenu() {
     this.mobileMenuOpen = !this.mobileMenuOpen;
   }
 
-  goHome() {
-    this.router.navigate(['/']);
+  logout() {
+    this.auth.logout();
+    this.router.navigate(['/login']);
   }
 }

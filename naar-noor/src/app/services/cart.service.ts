@@ -1,12 +1,8 @@
 import { Injectable, computed, signal } from '@angular/core';
+import { CartItem } from '../models';
 
-export interface CartItem {
-  menuItemId: string;
-  name: string;
-  price: number;
-  quantity: number;
-  category: string;
-}
+export type { CartItem };
+
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
@@ -55,6 +51,16 @@ export class CartService {
 
   clear(): void {
     this.items.set([]);
+  }
+
+  setQuantity(id: string, qty: number): void {
+    if (qty <= 0) {
+      this.remove(id);
+      return;
+    }
+    this.items.update(list =>
+      list.map(i => i.menuItemId === id ? { ...i, quantity: qty } : i)
+    );
   }
 
   formattedTotal(): string {

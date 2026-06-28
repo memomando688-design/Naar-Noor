@@ -1,13 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
+import { SeoConfig } from '../models';
 
-export interface SeoConfig {
-  title: string;
-  description?: string;
-  canonicalUrl?: string;
-  ogImage?: string;
-  ogType?: string;
-}
+export type { SeoConfig };
+
 
 const BASE_TITLE = 'Naar & Noor';
 const DEFAULT_DESCRIPTION = 'Authentic Himalayan cuisine with flame-grilled specialties. Reserve your table or order online.';

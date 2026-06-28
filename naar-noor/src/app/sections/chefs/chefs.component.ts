@@ -1,21 +1,14 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApiService, Chef } from '../../services/api.service';
+import { ApiService } from '../../services/api.service';
 import { RevealDirective } from '../../directives/scroll-reveal.directive';
+import { Chef, ChefView } from '../../models';
 
 const CHEF_IMAGES = [
   'assets/chefs/chef-arjun.jpg',
   'assets/chefs/chef-maya.jpg',
 ];
 
-interface ChefView {
-  name: string;
-  role: string;
-  image: string;
-  bio: string;
-  specialty: string;
-  initial: string;
-}
 
 @Component({
   selector: 'app-chefs',

@@ -8,8 +8,8 @@ import { Subscription } from 'rxjs';
 import { CartService } from '../../services/cart.service';
 import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
+import { DrawerStep } from '../../models';
 
-type DrawerStep = 1 | 2 | 3;
 
 @Component({
   selector: 'app-cart-drawer',
@@ -45,7 +45,7 @@ type DrawerStep = 1 | 2 | 3;
            class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200]"></div>
 
       <!-- Drawer panel -->
-      <div @drawer
+      <div @drawer data-cy="cart-drawer"
            class="fixed right-0 top-0 h-full w-full max-w-sm sm:max-w-md bg-[#0f0f0f] border-l border-white/5 z-[201] flex flex-col shadow-2xl">
 
         <!-- ── Header ── -->
@@ -72,7 +72,7 @@ type DrawerStep = 1 | 2 | 3;
               {{ cart.count() }} {{ cart.count() === 1 ? 'item' : 'items' }}
             </span>
           </div>
-          <button (click)="closeDrawer()" class="text-neutral-500 hover:text-white transition-colors p-1">
+          <button (click)="closeDrawer()" data-cy="cart-drawer-close" class="text-neutral-500 hover:text-white transition-colors p-1">
             <iconify-icon icon="solar:close-circle-linear" width="24"></iconify-icon>
           </button>
         </div>

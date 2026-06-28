@@ -5,15 +5,8 @@ import { CustomCalendarComponent } from '../../components/custom-calendar/custom
 import { CustomDropdownComponent } from '../../components/custom-dropdown/custom-dropdown.component';
 import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
+import { ReservationForm } from '../../models';
 
-interface ReservationForm {
-  fullName: string;
-  email: string;
-  phone: string;
-  date: Date | null;
-  time: string;
-  guests: string;
-}
 
 @Component({
   selector: 'app-hero',

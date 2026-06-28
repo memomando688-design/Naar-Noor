@@ -1,7 +1,7 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CartService } from '../../services/cart.service';
 import { ApiService } from '../../services/api.service';
 import { ToastService } from '../../services/toast.service';
@@ -10,7 +10,7 @@ import { SeoService } from '../../services/seo.service';
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './checkout.component.html'
 })
@@ -25,23 +25,18 @@ export class CheckoutComponent implements OnInit {
   form!: FormGroup;
   submitting = false;
 
-  readonly orderTypes = [
-    { value: 'collection', label: 'Takeaway',  sub: 'Pick up in store',           icon: 'solar:bag-5-linear' },
-    { value: 'delivery',   label: 'Delivery',  sub: 'Delivered to your door',     icon: 'solar:delivery-linear' },
-    { value: 'dine-in',    label: 'Dine-in',   sub: 'Eat at your reserved table', icon: 'solar:tea-cup-linear' }
-  ];
-
   ngOnInit(): void {
-    this.seo.setCheckout();
+    this.seo.setTitle('Checkout');
     if (this.cart.isEmpty()) {
       this.router.navigate(['/']);
       return;
     }
+
     this.form = this.fb.group({
       customerName:         ['', [Validators.required, Validators.minLength(2)]],
       email:                ['', [Validators.required, Validators.email]],
       phoneNumber:          ['', [Validators.required, Validators.minLength(7)]],
-      type:                 ['collection', Validators.required],
+      type:                 ['pickup', Validators.required], // Use 'pickup' by default to match E2E
       deliveryAddress:      [''],
       tableReservationName: [''],
       notes:                ['', Validators.maxLength(300)]
@@ -70,12 +65,19 @@ export class CheckoutComponent implements OnInit {
   get orderType(): string { return this.form?.get('type')?.value ?? ''; }
   get isDelivery(): boolean { return this.orderType === 'delivery'; }
   get isDineIn():   boolean { return this.orderType === 'dine-in'; }
+  get isPickup():   boolean { return this.orderType === 'pickup'; }
 
   get f() { return this.form.controls; }
 
   err(field: string): boolean {
     const c = this.form.get(field);
-    return !!(c && c.invalid && c.touched);
+    return !!(c && c.invalid && (c.touched || c.dirty));
+  }
+
+  updateQty(itemId: string, event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const val = parseInt(input.value, 10);
+    this.cart.setQuantity(itemId, val);
   }
 
   submit(): void {
@@ -85,12 +87,16 @@ export class CheckoutComponent implements OnInit {
     }
     this.submitting = true;
     const val = this.form.value;
+
+    // Map 'pickup' to 'collection' for the backend API
+    const apiType = val.type === 'pickup' ? 'collection' : val.type;
+
     this.api.createOrder({
       customerName:         val.customerName,
       email:                val.email,
       phoneNumber:          val.phoneNumber,
       notes:                val.notes || undefined,
-      type:                 val.type,
+      type:                 apiType,
       deliveryAddress:      val.deliveryAddress  || undefined,
       tableReservationName: val.tableReservationName || undefined,
       items: this.cart.items().map(i => ({
@@ -115,6 +121,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/']);
+    this.router.navigate(['/menu']);
   }
 }

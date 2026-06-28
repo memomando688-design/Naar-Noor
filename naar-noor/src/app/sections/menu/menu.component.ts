@@ -1,19 +1,10 @@
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApiService, MenuItem } from '../../services/api.service';
+import { ApiService } from '../../services/api.service';
 import { CartService } from '../../services/cart.service';
 import { RevealDirective } from '../../directives/scroll-reveal.directive';
+import { MenuItem, MenuItemView } from '../../models';
 
-interface MenuItemView {
-  id: string;
-  name: string;
-  price: number;
-  priceFormatted: string;
-  description: string;
-  category: string;
-  isVegetarian: boolean;
-  isVegan: boolean;
-}
 
 @Component({
   selector: 'app-menu',
