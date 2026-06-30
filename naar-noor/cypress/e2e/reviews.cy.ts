@@ -110,13 +110,15 @@ describe('Reviews E2E Tests', () => {
     });
 
     it('should add review to list', () => {
-      const initialCount = cy.get('[data-cy="review-card"]').then($reviews => $reviews.length);
-      cy.get('input[name="reviewerName"]').type('Fatima Khan');
-      cy.get('[data-cy="rating-selector"]').find('button').eq(4).click();
-      cy.get('textarea[name="comment"]').type('Fantastic service and delicious food!');
-      cy.get('button').contains('Submit Review').click();
-      cy.get('[data-cy="review-card"]').then($reviews => {
-        expect($reviews.length).to.be.greaterThan(initialCount);
+      cy.get('[data-cy="review-card"]').then($initial => {
+        const initialCount = $initial.length;
+        cy.get('input[name="reviewerName"]').type('Fatima Khan');
+        cy.get('[data-cy="rating-selector"]').find('button').eq(4).click();
+        cy.get('textarea[name="comment"]').type('Fantastic service and delicious food!');
+        cy.get('button').contains('Submit Review').click();
+        cy.get('[data-cy="review-card"]').then($reviews => {
+          expect($reviews.length).to.be.greaterThan(initialCount);
+        });
       });
     });
 
